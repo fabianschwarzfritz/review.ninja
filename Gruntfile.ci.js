@@ -60,42 +60,7 @@ module.exports = function(grunt) {
 					src: ['app.js', 'src/client/**/*.js', 'src/server/**/*.js', 'src/tests/**/*.js']
 				}
 			}
-		},
-
-		// review.ninja
-		http: {
-			'post-mocha-results': {
-				options: {
-				  url: 'http://review.ninja/vote/' + MOCHA_TOOL_ID + '/' + TRAVIS_COMMIT,
-				  method: 'POST',
-				  ignoreErrors: true
-				},
-				files: {
-					'report': 'output/mochaTest/server.out'
-				}
-			},
-			'post-karma-results': {
-				options: {
-				  url: 'http://review.ninja/vote/' + KARMA_TOOL_ID + '/' + TRAVIS_COMMIT,
-				  method: 'POST',
-				  ignoreErrors: true
-				},
-				files: {
-					'report': 'output/karma/client.out'
-				}
-			},
-			'post-jshint-results': {
-				options: {
-				  url: 'http://review.ninja/vote/' + JSHINT_TOOL_ID + '/' + TRAVIS_COMMIT,
-				  method: 'POST',
-				  ignoreErrors: true
-				},
-				files: {
-					'report': 'output/jshint/jshint.out'
-				}
-			}
-		}		
-
+		}
 	};
 
 	// Initialize configuration
@@ -122,11 +87,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-mocha-test');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-http');
 	grunt.loadNpmTasks('grunt-mocha-istanbul');
 	grunt.loadNpmTasks('grunt-coveralls');
 
-	grunt.registerTask('default', ['jshint', 'mochaTest', 'karma', 'http']);
+	grunt.registerTask('default', ['jshint', 'mochaTest', 'karma']);
 	grunt.registerTask('coverage', ['mocha_istanbul:coverage', 'coveralls:mocha']);
 
 };
