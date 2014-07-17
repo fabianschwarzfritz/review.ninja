@@ -54,13 +54,13 @@ router.all('/vote/:uuid/:comm', function(req, res) {
 			if (err) {
 				console.log(err);
 				logger.log('Mongoose[Vote] err', ['tool', 'mongoose', '500']);
-				return res.send(500);
+				return res.send(500, 'Mongoose error finding previous vote');
 			}
 
 			if(previousVote) {
 				console.log('ERROR: Already voted.');
 				logger.log('Previously voted', ['tool', 'mongoose', '500']);
-				return res.send(403);
+				return res.send(403, 'Already voted.');
 			}
 
 			// Find repo
