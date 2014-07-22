@@ -32,7 +32,7 @@
 </div>
 
 <div class="row">
-	<div class="col-md-9">
+	<div class="col-md-8">
 
 		<tabset>
 			<tab heading="Stats">
@@ -187,22 +187,20 @@
 		
 	</div>
 
-	<div class="col-md-3">
-		<div ng-show="!vote.value && status.value==='pending' && ninja.value.config">
-			<div class="btn-group btn-block">
-				<button type="button" class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown">
-					Vote
-					<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu" style="width:100%;">
-					<li ng-repeat="vote in ninja.value.config.votes">
-						<a href ng-click="castVote(vote)">
-							{{ vote.description }}
-							<span class="badge pull-right" style="background-color:{{ vote.color }}">{{ vote.label }}</span>
-						</a>
-					</li>
-				</ul>
-			</div>
+	<div class="col-md-4">
+		<div ng-show="!vote.value && status.value==='pending' && ninja.value.config" class="btn-group btn-block" style="margin-bottom:20px;">
+			<button type="button" class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown">
+				Vote
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" style="width:100%;">
+				<li ng-repeat="vote in ninja.value.config.votes">
+					<a href ng-click="castVote(vote)">
+						{{ vote.description }}
+						<span class="badge pull-right" style="background-color:{{ vote.color }}">{{ vote.label }}</span>
+					</a>
+				</li>
+			</ul>
 		</div>
 		<ul class="list-group">
 			<li class="list-group-item" ng-repeat="vote in votes.value">

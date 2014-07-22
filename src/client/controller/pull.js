@@ -31,12 +31,13 @@ module.controller('PullCtrl', ['$scope', '$stateParams', '$HUB', '$RPC', '$Commi
 		repo: $stateParams.repo,
 		number: $stateParams.number,
 	}, function() {
-		$scope.commits.value.forEach(function(commit) {
-			commit.status = $RPC.call('vote', 'status', {
-				// repo uuid
+		$scope.commits.value.forEach(function(comm) {
+			// approval
+			$RPC.call('vote', 'status', {
 				repo: $scope.repo.value.id,
-				// comm uuid
-				comm: $scope.pull.value.head.sha
+				comm: comm.sha
+			}, function(err, status) {
+				comm.status = status.value;
 			});
 		});
 	});
@@ -175,6 +176,22 @@ module.controller('PullCtrl', ['$scope', '$stateParams', '$HUB', '$RPC', '$Commi
 			comm: $scope.pull.value.head.sha,
 			// vote
 			vote: value
+		});
+	};
+
+	$scope.merge = function() {
+		$HUB.call('pullRequests', 'merge', {
+			user: $stateParams.user,
+			repo: $stateParams.repo,
+			number: $stateParams.number
+		}, function(err, res) {
+			if(!err && res.value.merged) {
+				$scope.pull = $HUB.call('pullRequests', 'get', {
+					user: $stateParams.user,
+					repo: $stateParams.repo,
+					number: $stateParams.number
+				});
+			}
 		});
 	};
 

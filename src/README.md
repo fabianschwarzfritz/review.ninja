@@ -3,51 +3,57 @@ Feature Branch
 
 Start a feature
 
-	git checkout -b feature/foo master
+    git checkout -b feature/foo master
 
 Finish a feature
 
-	git push origin feature/foo
+    git push origin feature/foo
 
-	open a pull request from feature/foo to master
+    open a pull request from feature/foo to master
 
 Structure
 
     |-- src
     |   |-- bower
-    |	|	|-- bower component
-    |	|	|-- ...
+    |   |   |-- bower component
+    |   |   |-- ...
     |   |-- client
-    |	|	|-- controller
-    |	|	|	|-- angular controller
-    |	|	|	|-- ...
-    |	|	|-- directives
-    |	|	|	|-- angular directive
-    |	|	|	|-- ...
-    |	|	|-- templates
-    |	|	|	|-- html template
-    |	|	|	|-- ...
-    |	|	|-- index.html
+    |   |   |-- controller
+    |   |   |   |-- angular controller
+    |   |   |   |-- ...
+    |   |   |-- directives
+    |   |   |   |-- angular directive
+    |   |   |   |-- ...
+    |   |   |-- templates
+    |   |   |   |-- html template
+    |   |   |   |-- ...
+    |   |   |-- index.html
     |   |-- server
-    |	|	|-- api
-    |	|	|	|-- api
+    |   |   |-- api
+    |   |   |   |-- api
     |   |   |   |-- ...
-    |	|	|-- controller
-    |	|	|	|-- controller
+    |   |   |-- approval
+    |   |   |   |-- default
     |   |   |   |-- ...
-    |	|	|-- documents
-    |	|	|	|-- mongoose documents
+    |   |   |-- controller
+    |   |   |   |-- controller
     |   |   |   |-- ...
-    |	|	|-- middleware
-    |	|	|	|-- middleware
+    |   |   |-- documents
+    |   |   |   |-- mongoose documents
     |   |   |   |-- ...
-    |	|	|-- passports
-    |	|	|	|-- authentication strategy
+    |   |   |-- middleware
+    |   |   |   |-- middleware
     |   |   |   |-- ...
-    |	|	|-- services
-    |	|	|	|-- utility
+    |   |   |-- passports
+    |   |   |   |-- authentication strategy
     |   |   |   |-- ...
-    |	|	|-- app.js    
+    |   |   |-- services
+    |   |   |   |-- utility
+    |   |   |   |-- ...
+    |   |   |-- webhooks
+    |   |   |   |-- github webhook
+    |   |   |   |-- ...
+    |   |   |-- app.js    
     |   |-- tests
     |   |   |-- client
     |   |   |   |-- client tests
@@ -60,3 +66,25 @@ Structure
     |-- app.js
     |-- Gruntfile.js
     |-- package.json
+
+Bot Json
+
+    {
+        "comments": [{
+            "head": head, 
+            "body": body,
+            "path": file-path,
+            "line": line-number,
+        },
+        ...
+        ],
+        "issues": [{
+            "head": head, 
+            "body": body,
+            "path": file-path,
+            "line": line-number,
+         },
+        ...
+        ],
+        vote: "+1"
+    }

@@ -10,21 +10,21 @@ module.exports = function(grunt) {
 
 		// Coverage
 		mocha_istanbul: {
-            coverage: {
-                src: 'src/tests/server', // the folder, not the files,
-                options: {
-                	coverage: true,
-                    mask: '**/*.js',
-                    coverageFolder: 'output/coverage'
-                }
-            }
-        },
+			coverage: {
+				src: 'src/tests/server', // the folder, not the files,
+				options: {
+					coverage: true,
+					mask: '**/*.js',
+					coverageFolder: 'output/coverage'
+				}
+			}
+		},
 
-        coveralls: {
-        	mocha: {
-        		src: 'output/coverage/lcov.info'
-        	}
-        },
+		coveralls: {
+			mocha: {
+				src: 'output/coverage/lcov.info'
+			}
+		},
 
 
 		// server tests
@@ -81,8 +81,8 @@ module.exports = function(grunt) {
 		require('reviewninja-coverage-reporter')
 			.report(options, lcovFileContents, onSuccess);
 
-        done();
-    });
+		done();
+	});
 
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-mocha-test');
