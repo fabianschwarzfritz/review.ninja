@@ -14,6 +14,8 @@ var router = express.Router();
 
 router.all('/vote/:uuid/:comm', function(req, res) {
 
+	logger.log("/vote/:uuid/:comm called", req);
+
 	// Load models
 	var Tool = require('mongoose').model('Tool');
 	var Repo = require('mongoose').model('Repo');
@@ -30,6 +32,7 @@ router.all('/vote/:uuid/:comm', function(req, res) {
 
 
 	if (!vote) {
+		logger.log("Bad request, no data sent", request);
 		return res.send(400, 'Bad request, no data sent');
 	}
 
@@ -37,56 +40,61 @@ router.all('/vote/:uuid/:comm', function(req, res) {
 	Tool.findById(uuid, function (err, tool) {
 
 		if (err) {
-			console.log(err);
 			logger.log('Mongoose[Tool] err', ['tool', 'mongoose', '500']);
 			return res.send(500);
 		}
 
 		if(!tool) {
-			console.log('ERROR: Tool not found. Does the tool id exist?');
-			logger.log('Tool not found', ['tool', '404']);
-			return res.send(404, 'Tool not found');
+			logger.log('Tool does not exist', ['tool', '404']);
+			return res.send(404, 'Tool does not exist');
 		}
 
 		// See if there is already a vote on the commit
-		Vote.findOne({repo: tool.repo, comm: comm, user: 'tool', name: tool.name}, function(err, previousVote) {
+		var params = {repo: tool.repo, comm: comm, user: 'tool', name: tool.name};
+		Vote.findOne(params, function(err, previousVote) {
 
 			if (err) {
-				console.log(err);
-				logger.log('Mongoose[Vote] err', ['tool', 'mongoose', '500']);
+				logger.log('Mongoose[Vote] err', err);
 				return res.send(500, 'Mongoose error finding previous vote');
 			}
 
 			if(previousVote) {
-				console.log('ERROR: Already voted.');
-				logger.log('Previously voted', ['tool', 'mongoose', '500']);
-				return res.send(403, 'Already voted.');
+				logger.log('Previously voted', previousVote);
+				return res.send(403, 'Previously voted.');
 			}
 
 			// Find repo
-			Repo.findOne({'uuid': tool.repo}, function(err, repo) {
+			var params = {'uuid': tool.repo};
+			logger.log('Finding vote...', params);
+			Repo.findOne(params, function(err, repo) {
 
 				if (err || !repo) {
-					console.log(err);
-					return res.send(404, 'Repo not found');
+					logger.log('Error finding repo', err);
+					return res.send(404, 'Error finding repo');
 				}
 
 				// Get repo data
+				var params = {obj: 'repos', fun: 'one', arg: {id: repo.uuid}, token: repo.token};
+				logger.log('Finding repo with GitHub API...', params);
 				github.call({obj: 'repos', fun: 'one', arg: {id: repo.uuid}, token: repo.token}, function(err, grepo) {
+
+					if (err) {
+						logger.log('Error finding repo', err);
+						return res.send(err.code, err.message.message);
+					}
 
 					var repoUser = grepo.owner.login;
 					var repoName = grepo.name;
 
 					var arg = {user: repoUser, repo: repoName, sha: comm};
-					console.log('Calling GitHub api...');
-					console.log(arg);
+
+					logger.log('Finding commit with GitHub API...', arg);
 
 					// Find commit for repo
 					github.call({obj: 'repos', fun: 'getCommit', arg: arg, token: repo.token}, function(err, comm) {
 
 						if(err) {
-							console.log('Error calling GitHub API');
-							console.log(err);
+							logger.log('Error finding commit', err);
 							return res.send(err.code, err.message.message);
 						}
 
@@ -139,6 +147,7 @@ router.all('/vote/:uuid/:comm', function(req, res) {
 						}
 
 						async.parallel(queue, function() {
+							logger.log('Done with vote');
 							res.send(201);
 						});
 					
