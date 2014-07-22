@@ -14,7 +14,7 @@ var router = express.Router();
 
 router.all('/vote/:uuid/:comm', function(req, res) {
 
-	logger.log("/vote/:uuid/:comm called", req);
+	logger.log('/vote/:uuid/:comm called', req);
 
 	// Load models
 	var Tool = require('mongoose').model('Tool');
@@ -32,7 +32,7 @@ router.all('/vote/:uuid/:comm', function(req, res) {
 
 
 	if (!vote) {
-		logger.log("Bad request, no data sent", request);
+		logger.log('Bad request, no data sent', request);
 		return res.send(400, 'Bad request, no data sent');
 	}
 

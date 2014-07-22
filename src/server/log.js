@@ -20,8 +20,8 @@ module.exports = {
 				
 			}
 		}
-	
+
 		if (arguments.length > 0)
-			console.log("LOG: " + arguments[0]);
+			console.log('LOG: ' + arguments[0]);
 	}
 };
